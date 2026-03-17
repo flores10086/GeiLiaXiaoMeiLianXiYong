@@ -1,7 +1,7 @@
   <script setup>
 </script>
 
-  <template >1234</template>
+  <template >李彬是你得不到的</template>
 
   <style>
   body {
