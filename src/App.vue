@@ -1,15 +1,10 @@
   <script setup>
+</script>
 
-
-  </script>
-
-  <template >
-  123
-  </template>
+  <template >1234</template>
 
   <style>
-  body{
-    margin: 0;
-  }
-
-  </style>
+body {
+  margin: 0;
+}
+</style>
