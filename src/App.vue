@@ -1,7 +1,11 @@
   <script setup>
 </script>
 
-  <template >1234</template>
+  <template >1234
+
+    我你爹
+
+  </template>
 
   <style>
 body {
