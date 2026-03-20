@@ -3,7 +3,7 @@
 
   <template >李彬是你得不到的</template>
 
-  <style>
+<style>
   body {
     margin: 0;
   }
