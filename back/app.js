@@ -1,4 +1,4 @@
-// 导入express
+// 导入express框架
 const express = require('express')
 // 创建实例
 const app = express()
