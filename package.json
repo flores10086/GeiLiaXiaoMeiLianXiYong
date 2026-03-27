@@ -8,12 +8,18 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "axios": "^1.13.6",
+    "echarts": "^6.0.0",
     "element-plus": "^2.13.6",
-    "vue": "^3.2.8",
+    "mitt": "^3.0.1",
+    "sass": "^1.98.0",
+    "sass-loader": "^16.0.7",
+    "style-loader": "^4.0.0",
+    "vue": "^3.5.31",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^1.6.0",
+    "@vitejs/plugin-vue": "^1.10.2",
     "@vue/compiler-sfc": "^3.2.6",
     "vite": "^2.5.2"
   }
