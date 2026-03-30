@@ -22,7 +22,7 @@
                     <!--底部外壳-->
                     <div class="footer-rapped">
                       <div class="forget-password">
-                        <span class="forget-password-button">忘记密码？</span>
+                        <span class="forget-password-button" @click="openForget">忘记密码</span>
                       </div>
                       <div class="footer-button">
                         <el-button type="primary">登录</el-button>
@@ -44,6 +44,9 @@
                     <el-form-item label="确认密码">
                       <el-input v-model="registerData.repassword" placeholder="请再次输入密码" />
                     </el-form-item>
+                     <div class="footer-button">
+                        <el-button type="primary">注册</el-button>
+                      </div>
                   </el-form>
                 </el-tab-pane>
               </el-tabs>
@@ -60,10 +63,12 @@
       </el-footer>
     </el-container>
   </div>
+  <forget ref="forgetP"></forget>
 </template>
   
 <script lang="ts" setup>
   import { ref,reactive } from 'vue'
+  import forget from './components/forget_password.vue'
   const activeName = ref('first')
 //表单接口
   interface formData {
@@ -83,6 +88,12 @@
     password: '',
     repassword: '',
   })
+
+  const forgetP = ref()
+  //打开忘记密码弹窗
+  const openForget = () => {
+    forgetP.value.open()
+  }
 </script>
 
 <style lang="scss" scoped>
