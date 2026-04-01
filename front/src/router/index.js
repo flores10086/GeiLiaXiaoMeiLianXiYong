@@ -8,7 +8,7 @@ import {
 const routes = [
     {
         path:'/',
-        redirect:'/menu'
+        redirect:'/login'
     },
     {
         name:'login',

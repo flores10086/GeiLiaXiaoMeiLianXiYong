@@ -2,8 +2,8 @@
     <div class="common-layout">
         <el-container>
             <el-aside width="200px">
+                <div class="title">通用后台管理系统</div>
                 <el-menu class="el-menu-vertical-demo" router>
-                    <div class="title">通用后台管理系统</div>
                     <el-menu-item index="home">
                         <el-icon><House /></el-icon>
                         <span>首页</span>
@@ -69,7 +69,25 @@
                 </el-menu>
             </el-aside>
             <el-container>
-                <el-header>头部</el-header>
+                <el-header>
+                    <span class="header-left-content">尊敬的 cxy 欢迎您登录本系统</span>
+                    <div class="header-right-content">
+                        <el-icon :size="20"><Message /></el-icon>
+                        <el-avatar :size="24" :src="circleUrl" />
+                        <el-dropdown>
+                            <span class="el-dropdown-link">
+                            设置
+                            </span>
+                            <template #dropdown>
+                            <el-dropdown-menu>
+                            <el-dropdown-item>设置账号</el-dropdown-item>
+                            <el-dropdown-item>更改头像</el-dropdown-item>
+                            <el-dropdown-item>退出登录</el-dropdown-item>
+                            </el-dropdown-menu>
+                            </template>
+                        </el-dropdown>
+                    </div>
+                </el-header>
                 <el-main>
                     <router-view></router-view>
                 </el-main>
@@ -80,20 +98,31 @@
 
 <script lang="ts" setup>
 import {Menu as IconMenu,} from '@element-plus/icons-vue'
-import {ref}from 'vue'
+import { reactive, toRefs, ref} from 'vue'
+const state = reactive({
+  circleUrl:
+    'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png',
+})
+const { circleUrl } = toRefs(state)
+
 </script>
 
 <style lang="scss" scoped>
+    //侧边栏
     .el-aside {
         height: 100vh;
         background: #2b303b; 
         width: 210px;
-        overflow: hidden;//隐藏滚动条
+        //隐藏滚动条
+        overflow: hidden;
+        //菜单
         .el-menu {
             background: #2b303b;
+            width: 210px;
             height: 100vh;
             border: 0px;
         }
+        //标题
         .title {
             padding: 20px;
             display: flex;
@@ -101,5 +130,53 @@ import {ref}from 'vue'
             color: #fff;
             background-color: #2b303b;
         }
+    }
+    .el-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #262f3e;
+        color: #c1c6c8;
+        height: 55px;
+        //欢迎语
+        .header-left-content {
+            font-size: 14px;
+        }
+        .header-right-content {
+            width:160px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+    }
+    /* 整个菜单铺满 */
+    .el-menu-item {
+        color: #fff;
+        background: #2b303b;
+    }
+    /* hover 整行变色 */
+    .el-menu-item:hover {
+        background-color: #006eff;
+    }
+
+    /* 选中状态（最关键） */
+    .el-menu-item.is-active {
+        background-color: #1677ff;
+        color: #fff ;
+    }
+    :deep(.el-menu-item-group__title){
+        background: #2b303b;
+       
+    }
+    :deep(.el-menu-inline){
+        background: #2b303b;
+    }
+    /* 子菜单标题 */
+    :deep(.el-sub-menu__title:hover) {
+        background-color: #006eff; 
+    }  
+
+    :deep(.el-sub-menu__title ){
+        color: #fff;
     }
 </style>

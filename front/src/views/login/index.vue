@@ -45,7 +45,7 @@
                       <el-input v-model="registerData.repassword" placeholder="请再次输入密码" />
                     </el-form-item>
                      <div class="footer-button">
-                        <el-button type="primary">注册</el-button>
+                        <el-button type="primary" @click="Register">注册</el-button>
                       </div>
                   </el-form>
                 </el-tab-pane>
@@ -69,6 +69,9 @@
 <script lang="ts" setup>
   import { ref,reactive } from 'vue'
   import forget from './components/forget_password.vue'
+  import {
+    login,register
+  } from '@/api/login'
   const activeName = ref('first')
 //表单接口
   interface formData {
@@ -88,7 +91,15 @@
     password: '',
     repassword: '',
   })
+  //注册
+  const Register = async () =>{
+    const res = await register(registerData)
+    console.log(res)
+  }
 
+
+
+  //忘记密码弹窗
   const forgetP = ref()
   //打开忘记密码弹窗
   const openForget = () => {
