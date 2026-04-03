@@ -15,7 +15,14 @@ exports.register = (req, res) => {
 
     const sql = 'SELECT * FROM users WHERE account = ?';
     db.query(sql, reginfo.account, (err, results) => {
-        if (err) return res.send({ status: 1, message: '查询失败' });
+        if (err) {
+            console.log('SQL错误:', err);
+            return res.send({
+            status: 1,
+            message: err.message
+            }
+        );
+}
         if (results.length > 0) {
             return res.send({
                 status: 1,

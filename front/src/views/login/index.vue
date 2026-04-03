@@ -69,6 +69,7 @@
 <script lang="ts" setup>
   import { ref,reactive } from 'vue'
   import forget from './components/forget_password.vue'
+  import { ElMessage } from 'element-plus'
   import {
     login,register
   } from '@/api/login'
@@ -91,10 +92,28 @@
     password: '',
     repassword: '',
   })
+  //登录
+   const Login = async() => {
+   const res = await login(loginData)
+    console,log(res)
+   }
   //注册
   const Register = async () =>{
-    const res = await register(registerData)
-    console.log(res)
+    if(registerData.password==registerData.password){
+        const res = await register(registerData)
+        if(res.data.message=='注册成功'){
+          ElMessage({
+          message: '注册成功',
+          type: 'success',
+          })
+          activeName.value = 'first'
+        }else{
+          ElMessage.error('注册失败')
+        }
+    }else{
+          ElMessage.error('两次密码不一致')
+    }
+    
   }
 
 
