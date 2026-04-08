@@ -21,7 +21,7 @@
                 </el-form-item>
                 <div class="footer-wrapped">
                   <div class="forget-password">
-                    <span class="forget-password-button">忘记密码</span>
+                    <span class="forget-password-button" @click="openForget">忘记密码</span>
                    </div>           
                      <div class="footer-button">
                      <el-button type="primary">登录</el-button>
@@ -66,10 +66,12 @@
       </el-footer>
     </el-container>
   </div>
+  <forget ref='forgetP'></forget>
 </template>
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
+import forget from './components/forget_password.vue'
 const activeName = ref('first')
 // 表单接口
 interface formData {
@@ -89,6 +91,11 @@ const registerData :formData= reactive({
   repassword:'',
 })
 
+const forgetP = ref()
+// 打开忘记密码弹窗
+  const openForget = () =>{
+       forget.value.open()
+  }
 </script>
 
 <style lang="scss" scoped>
