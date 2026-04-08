@@ -13,7 +13,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="state.forgetPasswordDialog = false">取消</el-button>
-                    <el-button type="primary" @click= "openChangePassword">
+                    <el-button type="primary" @click= "verifyAccount">
                         下一步
                     </el-button>
                 </span>
@@ -33,7 +33,7 @@
             <template #footer>
                 <span class="dialog-footer">
                     <el-button @click="state.changePasswordDialog = false">取消</el-button>
-                    <el-button type="primary" @click="state.changePasswordDialog = false">
+                    <el-button type="primary" @click="resetPassword">
                         确定
                     </el-button>
                 </span>
@@ -43,6 +43,8 @@
 
 <script lang="ts" setup>
     import { reactive, ref } from 'vue'
+    import {verify, reset } from '@api/login.js'
+    import { ElMessage } from 'element-plus'
     //表单对齐方式
     const labelPosition = ref('top')
     //表单对象接口
@@ -79,10 +81,23 @@
         forgetPasswordDialog: false,
         changePasswordDialog: false,
     })
-    //打开修改密码的弹窗
-    const openChangePassword = () => {
-        state.forgetPasswordDialog = false
-        state.changePasswordDialog = true
+    //打开验证邮箱和账号的弹窗
+    const verifyAccount = async () => {
+        const res = await verify(forgetData)
+        if(res.data.status == 0){
+            ElMessage({
+                message:'验证成功',
+                type:'success'
+            })
+            state.forgetPasswordDialog = false
+            state.changePasswordDialog = true
+        }else{
+            ElMessage.error('验证失败')
+        }
+    }
+    //重置密码
+    const resetPassword = () =>{
+        const res = await verify(forgetData)
     }
     //打开弹窗
     const open = () => {

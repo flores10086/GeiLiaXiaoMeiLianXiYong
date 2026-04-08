@@ -25,7 +25,7 @@
                         <span class="forget-password-button" @click="openForget">忘记密码</span>
                       </div>
                       <div class="footer-button">
-                        <el-button type="primary">登录</el-button>
+                        <el-button type="primary" @click="Login">登录</el-button>
                       </div>
                       <div class="footer-go-register">
                         没有账号？<span class="go-register-button">去注册</span>
@@ -70,10 +70,10 @@
   import { ref,reactive } from 'vue'
   import forget from './components/forget_password.vue'
   import { ElMessage } from 'element-plus'
-  import {
-    login,register
-  } from '@/api/login'
+  import { useRouter } from 'vue-router'
+  import {login,register} from '@/api/login'
   const activeName = ref('first')
+  const router = useRouter()
 //表单接口
   interface formData {
     account : string;
@@ -94,8 +94,19 @@
   })
   //登录
    const Login = async() => {
-   const res = await login(loginData)
-    console,log(res)
+      const res = await login(loginData)
+      const { token } = res.data
+      if(res.data.message=='登录成功'){
+        ElMessage({
+            message: '登录成功',
+            type: 'success',
+            })
+            localStorage.setItem('token',token)
+            //跳转
+            router.push('/home')
+      }else{
+        ElMessage.error('登录失败')
+    }
    }
   //注册
   const Register = async () =>{
