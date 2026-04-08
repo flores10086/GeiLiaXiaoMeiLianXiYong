@@ -23,10 +23,10 @@
     <el-dialog v-model="state.changePasswordDialog" title="修改密码" width="30%" >
         <el-form  class="login-from" :label-position="labelPosition" :rules="rules">
             <el-form-item label="输入您的新密码" prop="password">
-                    <el-input v-model="forgetData.password" placeholder="输入您的新密码" />
+                    <el-input v-model="forgetData.password" placeholder="输入您的新密码" show-password />
             </el-form-item>
             <el-form-item label="再次输入您的新密码" prop="repassword">
-                    <el-input v-model="forgetData.repassword" placeholder="再次输入您的新密码" />
+                    <el-input v-model="forgetData.repassword" placeholder="再次输入您的新密码" show-password/>
             </el-form-item>
         </el-form>
         <!--底部内容-->`
@@ -43,7 +43,7 @@
 
 <script lang="ts" setup>
     import { reactive, ref } from 'vue'
-    import {verify, reset } from '@api/login.js'
+    import {verify, reset } from '@/api/login.js'
     import { ElMessage } from 'element-plus'
     //表单对齐方式
     const labelPosition = ref('top')
@@ -89,6 +89,9 @@
                 message:'验证成功',
                 type:'success'
             })
+            //localStorage.setItem 存放到浏览器的本地存储空间
+            //sessionStorage.setItem 存放到浏览器的会话存储空间
+            sessionStorage.setItem('id',res.data.id)
             state.forgetPasswordDialog = false
             state.changePasswordDialog = true
         }else{
@@ -96,8 +99,19 @@
         }
     }
     //重置密码
-    const resetPassword = () =>{
-        const res = await verify(forgetData)
+    const resetPassword = async () =>{
+        if(forgetData.password==forgetData.repassword){
+            const newPassword = forgetData.repassword
+            //localStorage/sessionStorage.getItem获取我们存储在浏览器的数据
+            //调用接口
+            await reset(localStorage.getItem('id'),newPassword)
+            ElMessage({
+                message:'修改成功',
+                type:'success',
+            })
+        }else{
+            ElMessage.error('修改失败，请检查密码是否一致')
+        }
     }
     //打开弹窗
     const open = () => {

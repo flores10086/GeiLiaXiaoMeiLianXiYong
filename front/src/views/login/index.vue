@@ -17,7 +17,7 @@
                       <el-input v-model="loginData.account" placeholder="请输入账号" />
                     </el-form-item>
                     <el-form-item label="密码">
-                      <el-input v-model="loginData.password" placeholder="请输入密码" />
+                      <el-input v-model="loginData.password" placeholder="请输入密码"  show-password/>
                     </el-form-item>
                     <!--底部外壳-->
                     <div class="footer-rapped">

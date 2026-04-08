@@ -1,9 +1,16 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import { fileURLToPath, URL } from 'url'
+import { reslove } from 'path'
+import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
+const pathResolve = dir => reslove(__dirname,dir)
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins:[vue(),
+            createSvgIconsPlugin({
+              iconDirs: [reslove(process.cwd(),'src/assets/svg')],
+              symbolId:'icon-[dir]-[name]',
+            }),
+          ],
   server: {
     port: 8080,
     open: true,
@@ -11,7 +18,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': pathResolve('./src')
     }
   }
 })
