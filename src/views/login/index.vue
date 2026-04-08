@@ -94,7 +94,7 @@ const registerData :formData= reactive({
 const forgetP = ref()
 // 打开忘记密码弹窗
   const openForget = () =>{
-       forget.value.open()
+       forgetP.value.open()
   }
 </script>
 
