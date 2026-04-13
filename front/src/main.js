@@ -1,4 +1,5 @@
 import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 import App from './App.vue'
 // 导入路由
 import router from './router'
@@ -14,8 +15,11 @@ import 'virtual:svg-icons-register'
 // 【关键】导入并全局注册 SvgIcon 组件（推荐全局注册，避免局部导入问题）
 import SvgIcon from '@/components/SvgIcon.vue'
 
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 // 实例化
+const pinia = createPinia()
 const app = createApp(App)
+
 
 // 注册 Element Plus 图标
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -31,4 +35,4 @@ app.use(ElementPlus, {
 })
 
 // 【关键】移除冗余的 use(ElementPlus)，只挂载一次
-app.use(router).mount('#app')
+app.use(router).use(pinia).mount('#app')

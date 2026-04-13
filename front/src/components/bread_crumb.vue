@@ -22,6 +22,10 @@
         gap:6px;
     }
 
+    .bread-crumb-icon{
+        margin-right: 4px;
+    }
+
     :deep(.el-breadcrumb_item){
         height: 30px;
         font-size: 16px;

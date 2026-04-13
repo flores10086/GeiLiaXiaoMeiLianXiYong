@@ -1,4 +1,4 @@
-import instance from "@/http/index";
+import instance from "@/http/index.js";
 //注册
 export const register = (data) => {
     const{

@@ -154,6 +154,7 @@
     }
     .el-main{
         --el-main-padding: 0;
+        background-color: #f3f4fa;
 
     }
     /* 整个菜单铺满 */
