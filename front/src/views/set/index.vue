@@ -11,10 +11,10 @@
                         <div class="account-infor-content">
                             <!--action 是上传头像的接口-->
                             <el-upload class="avatar-uploader" 
-                                action="http://localhost:3007"
+                                action="http://127.0.0.1:3007/user/uploadAvatar"
                                 :show-file-list="false":on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
-                                <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+                                <img v-if="userStore.imageUrl" :src="userStore.imageUrl" class="avatar" />
                                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
                             </el-upload>
                         </div>
@@ -22,50 +22,50 @@
                     <div class="account-infor-wrapped">
                         <span>用户账号：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="AccountDetailData.account" disable></el-input>
+                            <el-input v-model="userStore.account" disable></el-input>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户密码：</span>
                         <div class="account-infor-content">
-                            <el-button  type="primary">修改密码</el-button>
+                            <el-button  type="primary" @click="openChangePassword">修改密码</el-button>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户姓名：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="AccountDetailData.name" disable></el-input>
+                            <el-input v-model="userStore.name" disable></el-input>
                         </div>
-                        <div><el-button  type="primary">保存</el-button></div>
+                        <div><el-button  type="primary" @click="saveName">保存</el-button></div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户性别：</span>
                         <div class="account-infor-content">
-                            <el-select v-model="AccountDetailData.sex">
+                            <el-select v-model="userStore.sex">
                                 <el-option label="男" value="男" />
                                 <el-option label="女" value="女" />
                             </el-select>
                         </div>
-                        <div><el-button  type="primary">保存</el-button></div>
+                        <div><el-button  type="primary" @click="saveSex">保存</el-button></div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户身份：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="AccountDetailData.identity" disable></el-input>
+                            <el-input v-model="userStore.identity" disable></el-input>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户部门：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="AccountDetailData.department" disable></el-input>
+                            <el-input v-model="userStore.department" disable></el-input>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户邮箱：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="AccountDetailData.email" disable></el-input>
+                            <el-input v-model="userStore.email" disable></el-input>
                         </div>
-                        <div><el-button  type="primary">保存</el-button></div>
+                        <div><el-button  type="primary" @click="saveEmail">保存</el-button></div>
                     </div>
 
                 </el-tab-pane>
@@ -75,7 +75,8 @@
             </el-tabs>
         </div>
     </div>
-
+    <!--修改密码弹窗-->
+    <change ref="changeP"></change> 
 </template>
 
 <script lang="ts" setup>
@@ -84,7 +85,12 @@
     import { ElMessage } from 'element-plus'
     import { Plus } from '@element-plus/icons-vue'
     import type { UploadProps } from 'element-plus'
-import { changeIdentityAdmin } from '../../../../back/router_handle/userinfo'
+    import { useUserInfor } from '@/store/useinfor.js'
+    import  change  from './components/change_password.vue'
+    import { changeName,changeSex,changeEmail} from '@/api/uesrinfor.js'
+    import { bindAccount } from '@/api/userinfor.js'
+    const userStore = useUserInfor()
+    const changeP = ref()
     //面包屑
     const breadcrumb = ref()
     //面包屑参数
@@ -94,12 +100,28 @@ import { changeIdentityAdmin } from '../../../../back/router_handle/userinfo'
     //默认打开标签页
     const activeName = ref('first')
 
-    const imageUrl = ref('')
+    //头像上传成功的函数 response回应
+    const handleAvatarSuccess: UploadProps['onSuccess'] = (response,) => {
+        //imageUrl.value = URL.createObjectURL(uploadFile.raw!)
+        if( response.status == 0){
+            userStore.$patch({
+                imageUrl:response.url
+            })
+            ElMessage({
+                message:'更新头像成功',
+                type:'success',
+            }),
+            (async ()=>{
+                const res = await bindAccount(userStore.account,response.onlyId,response.url)
+                console.log(res)
+            })()
+        }else{
+            ElMessage.error('更新头像失败！请重新上传')
+        }
 
-    const handleAvatarSuccess: UploadProps['onSuccess'] = (response,uploadFile) => {
-        imageUrl.value = URL.createObjectURL(uploadFile.raw!)
     }
 
+    //头像上传之前的函数
     const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
         if (rawFile.type !== 'image/jpeg') {
             ElMessage.error('头像必须是JPG格式!')
@@ -119,7 +141,16 @@ import { changeIdentityAdmin } from '../../../../back/router_handle/userinfo'
         department:'',
         email:''
     })
+    //打开密码弹窗
+    const openChangePassword = () =>{
+        changeP.value.open()
+    }
 
+    //保存姓名
+    const saveName = async () =>{
+        const res = await changeName(userStore.name,sessionStorage.getItem('id'))
+        console.log(res)
+    }
 
 </script>
 

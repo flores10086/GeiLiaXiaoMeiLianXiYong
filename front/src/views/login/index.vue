@@ -95,23 +95,24 @@
     repassword: '',
   })
   //登录
-   const Login = async() => {
-      const res = await login(loginData)
-      const { id } = res.data.results
-      const { token } = res.data
-      if(res.data.message=='登录成功'){
-        ElMessage({
-            message: '登录成功',
-            type: 'success',
-            })
-            localStorage.setItem('token',token)
-            store.userInfor(id)
-            //跳转
-            router.push('/home')
-      }else{
-        ElMessage.error('登录失败')
+  const Login = async() => {
+    const res = await login(loginData)
+    const { id } = res.data.results
+    const { token } = res.data
+    if(res.data.message=='登录成功'){
+      ElMessage({
+          message: '登录成功',
+          type: 'success',
+      })
+      sessionStorage.setItem('id',id)
+      localStorage.setItem('token',token)
+      store.userInfor(id)
+      //跳转
+      router.push('/home')
+    }else{
+      ElMessage.error('登录失败')
     }
-   }
+  }
   //注册
   const Register = async () =>{
     if(registerData.password==registerData.password){

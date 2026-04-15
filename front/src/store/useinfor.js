@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { getUserInfor } from "@/api/userinfor.js"
+
 export const useUserInfor = defineStore('userinfor', {
     state: () => {
         return {
@@ -7,7 +8,9 @@ export const useUserInfor = defineStore('userinfor', {
             name: '',
             sex: '',
             department: '',
-            identity: ''
+            identity: '',
+            account:'',
+            email:''
         }
     },
     actions: {
@@ -18,14 +21,10 @@ export const useUserInfor = defineStore('userinfor', {
             this.sex = res.data.sex
             this.department = res.data.department
             this.identity = res.data.identity
-        }
+            this.account = res.data.account
+            this.email = res.data.email
+        },
     },
-}, {
-    persist: {
-        //存储全部数据
-        enabled: true,
-        //关键字
-        key: 'userinfor',
-        storage: localStorage,
-    }
+    // 🎯 关键：persist 必须写在 actions 外面，大括号里面
+    persist: true
 })

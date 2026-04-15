@@ -1,33 +1,33 @@
 import {
     //创建路由实例
-    createRouter, 
+    createRouter,
     //创建路由的历史模式
     createWebHistory
 } from 'vue-router'
 
 const routes = [
     {
-        path:'/',
-        redirect:'/login'
+        path: '/',
+        redirect: '/login'
     },
     {
-        name:'login',
-        path:'/login',
-        component:()=>import('@/views/login/index.vue')
+        name: 'login',
+        path: '/login',
+        component: () => import('@/views/login/index.vue')
     },
     {
-        name:'menu',
-        path:'/menu',
-        component:()=>import('@/views/menu/index.vue'),
-        children:[{
-            name:'home',
-            path:'/home',
-            component:()=>import('@/views/home/index.vue')
+        name: 'menu',
+        path: '/menu',
+        component: () => import('@/views/menu/index.vue'),
+        children: [{
+            name: 'home',
+            path: '/home',
+            component: () => import('@/views/home/index.vue')
         },
         {
-            name:'set',
-            path:'/set',
-            component:()=>import('@/views/set/index.vue')
+            name: 'set',
+            path: '/set',
+            component: () => import('@/views/set/index.vue')
         }]
     }
 ]
