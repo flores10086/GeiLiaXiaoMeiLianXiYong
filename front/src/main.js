@@ -25,6 +25,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 app.component('SvgIcon', SvgIcon)
 app.use(ElementPlus, { locale: zhCn })
 // ✅ 先use(pinia)，再use(router)
-app.use(pinia)
-app.use(router)
-app.mount('#app')
+app.use(pinia).use(router).mount('#app')

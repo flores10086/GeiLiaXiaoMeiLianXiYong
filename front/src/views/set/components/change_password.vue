@@ -60,7 +60,7 @@
             //localStorage/sessionStorage.getItem获取我们存储在浏览器的数据
             //调用接口
             const res = await  changePassword(sessionStorage.getItem('id'),passwordData.oldPassword,passwordData.newPassword)
-            if(res.data.status == 0 ){
+            if(res.status == 0 ){
                 ElMessage({
                     message:'修改成功',
                     type:'success',

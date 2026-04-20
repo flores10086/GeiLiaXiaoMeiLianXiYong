@@ -1,4 +1,4 @@
-<<template>
+<template>
     <breadCrumb ref="breadcrumb" :item='item'></breadCrumb>
     <!--外壳-->
     <div class="common-wrapped">
@@ -12,7 +12,8 @@
                             <!--action 是上传头像的接口-->
                             <el-upload class="avatar-uploader" 
                                 action="http://127.0.0.1:3007/user/uploadAvatar"
-                                :show-file-list="false":on-success="handleAvatarSuccess"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
                                 <img v-if="userStore.imageUrl" :src="userStore.imageUrl" class="avatar" />
                                 <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
@@ -22,7 +23,7 @@
                     <div class="account-infor-wrapped">
                         <span>用户账号：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="userStore.account" disable></el-input>
+                            <el-input v-model="userStore.account" disabled></el-input>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
@@ -34,7 +35,7 @@
                     <div class="account-infor-wrapped">
                         <span>用户姓名：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="userStore.name" disable></el-input>
+                            <el-input v-model="userStore.name" disabled></el-input>
                         </div>
                         <div><el-button  type="primary" @click="saveName">保存</el-button></div>
                     </div>
@@ -51,32 +52,65 @@
                     <div class="account-infor-wrapped">
                         <span>用户身份：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="userStore.identity" disable></el-input>
+                            <el-input v-model="userStore.identity" disabled></el-input>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户部门：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="userStore.department" disable></el-input>
+                            <el-input v-model="userStore.department" disabled></el-input>
                         </div>
                     </div>
                     <div class="account-infor-wrapped">
                         <span>用户邮箱：</span>
                         <div class="account-infor-content">
-                            <el-input v-model="userStore.email" disable></el-input>
+                            <el-input v-model="userStore.email"></el-input>
                         </div>
                         <div><el-button  type="primary" @click="saveEmail">保存</el-button></div>
                     </div>
-
                 </el-tab-pane>
-                <el-tab-pane label="公司信息" name="second">公司信息</el-tab-pane>
+                <!--公司信息-->
+                <el-tab-pane label="公司信息" name="second">
+                    <div class="account-infor-wrapped">
+                        <span>公司名称</span>
+                        <div class="account-infor-content">
+                            <el-input v-model="companyName" ></el-input>
+                        </div>
+                        <div><el-button  type="primary" @click="changeCompanyname">编辑公司名称</el-button></div>
+                    </div>
+                    <div class="account-infor-wrapped">
+                        <span>公司介绍</span>
+                        <div class="account-infor-content">
+                            <el-button  type="success" @click="openEditor(1)">编辑公司介绍</el-button>
+                        </div>
+                    </div>
+                        <div class="account-infor-wrapped">
+                        <span>公司架构</span>
+                        <div class="account-infor-content">
+                            <el-button  type="success" @click="openEditor(2)">编辑公司架构</el-button>
+                        </div>
+                    </div>
+                        <div class="account-infor-wrapped">
+                        <span>公司战略</span>
+                        <div class="account-infor-content">
+                            <el-button  type="success" @click="openEditor(3)">编辑公司战略</el-button>
+                        </div>
+                    </div>
+                        <div class="account-infor-wrapped">
+                        <span>公司高层</span>
+                        <div class="account-infor-content">
+                            <el-button  type="success" @click="openEditor(4)">编辑公司高层</el-button>
+                        </div>
+                    </div>                    
+                </el-tab-pane>
                 <el-tab-pane label="首页管理" name="third">首页管理</el-tab-pane>
                 <el-tab-pane label="其它设置" name="fourth">其它设置</el-tab-pane>
             </el-tabs>
         </div>
     </div>
     <!--修改密码弹窗-->
-    <change ref="changeP"></change> 
+    <change ref="changeP"></change>
+    <editor ref="editorP"></editor> 
 </template>
 
 <script lang="ts" setup>
@@ -87,8 +121,12 @@
     import type { UploadProps } from 'element-plus'
     import { useUserInfor } from '@/store/useinfor.js'
     import  change  from './components/change_password.vue'
-    import { changeName,changeSex,changeEmail} from '@/api/uesrinfor.js'
+    import editor from './components/editor.vue'
+    import { bus } from '@/utils/mitt.js'
+    import { changeName,changeSex,changeEmail} from '@/api/userinfor.js'
+    import { getCompanyName,changeCompanyName } from '@/api/setting.js'
     import { bindAccount } from '@/api/userinfor.js'
+    
     const userStore = useUserInfor()
     const changeP = ref()
     //面包屑
@@ -149,9 +187,69 @@
     //保存姓名
     const saveName = async () =>{
         const res = await changeName(userStore.name,sessionStorage.getItem('id'))
+        if(res.status == 0 ){
+                ElMessage({
+                    message:'修改成功',
+                    type:'success',
+                })
+                
+            }else{
+                ElMessage.error('修改失败，请重新输入！')
+            }
+    }
+    //保存性别
+    const saveSex = async () =>{
+        const res = await changeSex(userStore.sex,sessionStorage.getItem('id'))
+        if(res.status == 0 ){
+                ElMessage({
+                    message:'修改成功',
+                    type:'success',
+                })
+                
+            }else{
+                ElMessage.error('修改失败，请重新输入！')
+            }
+    }
+    //保存邮箱
+    const saveEmail = async () =>{
+        const res = await changeEmail(userStore.email,sessionStorage.getItem('id'))
+        if(res.status == 0 ){
+                ElMessage({
+                    message:'修改成功',
+                    type:'success',
+                })
+                
+            }else{
+                ElMessage.error('修改失败，请重新输入！')
+            }
+    }
+    //公司信息
+    //公司名称
+    const companyName = ref()
+    //获取公司名字
+    const getCompanyName = async () =>{
+        companyName.value = await getCompanyName()
+    }
+    getCompanyName()
+
+    //修改公司名字
+    const changeCompanyname = async () => {
+        const res = await changeCompanyName({
+            set_name:'公司名称',
+            set_value:companyName.value
+        })
         console.log(res)
     }
 
+
+    const editorP = ref()
+    //打开富版本
+    const openEditor = (id:number) =>{
+        //第一个参数是标记 第二个参数要传入的值
+        bus.emit('editorTitle',id)
+        editorP.value.open()
+        
+    }
 </script>
 
 <style lang="scss" scoped>
@@ -159,8 +257,8 @@
     .common-wrapped{
         padding:8px;
         background: #f5f5f5;
-        //计算 减去头部和面包屑
-        height:calc(100vh - 85px);
+        //计算 减去头部和面包屑 + 2*8=16 边距
+        height:calc(100vh - 101px);
         //内容
         .common-content{
             padding:0 10px;

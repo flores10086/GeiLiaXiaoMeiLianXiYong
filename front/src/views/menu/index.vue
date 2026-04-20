@@ -70,7 +70,7 @@
             </el-aside>
             <el-container>
                 <el-header>
-                    <span class="header-left-content">尊敬的 cxy 欢迎您登录本系统</span>
+                    <span class="header-left-content">尊敬的 {{userStore.name}} 欢迎您登录本系统</span>
                     <div class="header-right-content">
                         <el-icon :size="20"><Message /></el-icon>
                         <el-avatar :size="24" :src="userStore.imageUrl" />
@@ -89,7 +89,7 @@
                     </div>
                 </el-header>
                 <el-main>
-                    <router-view></router-view>
+                    <router-view/>
                 </el-main>
             </el-container>
         </el-container>
@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-    import {Menu as IconMenu,} from '@element-plus/icons-vue'
+    import { Menu as IconMenu,} from '@element-plus/icons-vue'
     import { reactive, toRefs, ref} from 'vue'
     import { useUserInfor } from '@/store/useinfor.js'
     import { useRouter } from 'vue-router'

@@ -28,7 +28,7 @@
 
     :deep(.el-breadcrumb_item){
         height: 30px;
-        font-size: 16px;
+        font-size: 14px;
         line-height: 30px;
     }
 

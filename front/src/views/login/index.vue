@@ -71,8 +71,8 @@
   import forget from './components/forget_password.vue'
   import { ElMessage } from 'element-plus'
   import { useRouter } from 'vue-router'
-  import { login,register } from '@/api/login'
-  import { useUserInfor } from '@/store/useinfor'
+  import { login,register } from '@/api/login.js'
+  import { useUserInfor } from '@/store/useinfor.js'
   const activeName = ref('first')
   const router = useRouter()
   const store = useUserInfor()
@@ -97,9 +97,9 @@
   //登录
   const Login = async() => {
     const res = await login(loginData)
-    const { id } = res.data.results
-    const { token } = res.data
-    if(res.data.message=='登录成功'){
+    const { id } = res.results
+    const { token } = res
+    if(res.message=='登录成功'){
       ElMessage({
           message: '登录成功',
           type: 'success',
@@ -117,7 +117,7 @@
   const Register = async () =>{
     if(registerData.password==registerData.password){
         const res = await register(registerData)
-        if(res.data.message=='注册成功'){
+        if(res.message=='注册成功'){
           ElMessage({
           message: '注册成功',
           type: 'success',
