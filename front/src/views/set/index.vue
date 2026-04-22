@@ -103,7 +103,29 @@
                         </div>
                     </div>                    
                 </el-tab-pane>
-                <el-tab-pane label="首页管理" name="third">首页管理</el-tab-pane>
+                <el-tab-pane label="首页管理" name="third">
+                    <div class="home-wrapped">
+                        <!--提示-->
+                        <div class="tips">
+                            <span>提示：点击图片框进行切换首页轮播图</span>
+                        </div>
+                        <!-- 轮播图 -->
+                         <div class="swiper-wrapped" v-for="(item,index) in swiperData" :key='index'>
+                            <div class="swiper-name">轮播图{{ index+1 }}:&nbsp;&nbsp;</div>
+                              <el-upload class="avatar-uploader" 
+                              action="http://127.0.0.1:3007/set/uploadSwiper"
+                              :show-file-list="false"
+                              :on-success="handleSwiperSuccess"
+                              :before-upload="beforeAvatarUpload"
+                              :data='item'>
+                              <template #trigger>
+                                <img v-if="imageUrl?.[index]" :src="imageUrl?.[index]" class="swiper" />
+                                <img src="@/assets/W.png" alt="" v-else>
+                              </template>
+                            </el-upload>
+                         </div>
+                    </div>
+                </el-tab-pane>
                 <el-tab-pane label="其它设置" name="fourth">其它设置</el-tab-pane>
             </el-tabs>
         </div>
@@ -124,9 +146,8 @@
     import editor from './components/editor.vue'
     import { bus } from '@/utils/mitt.js'
     import { changeName,changeSex,changeEmail} from '@/api/userinfor.js'
-    import { getCompanyName,changeCompanyName } from '@/api/setting.js'
+    import { getCompanyName,changeCompanyName,getAllSwiper } from '@/api/setting.js'
     import { bindAccount } from '@/api/userinfor.js'
-    
     const userStore = useUserInfor()
     const changeP = ref()
     //面包屑
@@ -227,20 +248,22 @@
     //公司名称
     const companyName = ref()
     //获取公司名字
-    const getCompanyName = async () =>{
+    const getCompanyname = async () =>{
         companyName.value = await getCompanyName()
     }
-    getCompanyName()
-
+    getCompanyname()
     //修改公司名字
     const changeCompanyname = async () => {
-        const res = await changeCompanyName({
-            set_name:'公司名称',
-            set_value:companyName.value
-        })
-        console.log(res)
+        const res = await changeCompanyName(companyName.value)
+        if(res.status == 0){
+             ElMessage({
+                message:'修改公司名称成功',
+                type:'success'
+            })
+        }else{
+                ElMessage.error('修改失败，请重新输入！')
+        }
     }
-
 
     const editorP = ref()
     //打开富版本
@@ -250,6 +273,29 @@
         editorP.value.open()
         
     }
+    // 首页管理
+    const swiperData = [
+        {name:'swiper1'}, 
+        {name:'swiper2'},
+        {name:'swiper3'},
+        {name:'swiper4'},
+        {name:'swiper5'},
+        {name:'swiper6'}
+    ]
+
+    // 上传轮播图成功
+    const handleSwiperSuccess: UploadProps['onSuccess'] = (response,) =>{
+        getAllswiper()
+    }
+    // 轮播图
+    const imageUrl = ref([])
+    // 获取轮播图
+    const getAllswiper =async () =>{
+        const res = await getAllSwiper()
+        imageUrl.value = res
+    }
+    getAllswiper()
+
 </script>
 
 <style lang="scss" scoped>
@@ -280,6 +326,46 @@
                 //按钮
                 .account-save-button{
                     margin-left: 16px;   
+                }
+            }
+
+            // 首页管理外壳
+            .home-wrapped{
+                padding-left: 50px;
+                display: flex;
+                flex-direction: column;
+                // 提示
+                .tips{
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 8px;
+                    span{
+                        font-size: 14px;
+                        color: silver;
+                    }
+                }
+                // 轮播图
+                .swiper-wrapped{
+                    display: flex;
+                    margin-bottom: 16px;
+                    .swiper-name{
+                        font-size: 14px;
+                        margin-bottom: 24px;
+                    }
+                    // 深度穿透 + !important 强制锁定尺寸
+                    :deep(.el-upload) {
+                        width: 336px ;
+                        height: 96px ;
+                    }
+                    :deep(.el-upload-image) {
+                        width: 336px ;
+                        height: 96px ;
+                    }
+                    :deep(.swiper img) {
+                        width: 100% ;
+                        height: 100% ;
+                        object-fit: cover ;
+                    }
                 }
             }
         }
