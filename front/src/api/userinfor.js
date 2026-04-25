@@ -1,4 +1,5 @@
 import instance from "@/http/index.js";
+
 //获得用户信息
 export const getUserInfor = id => {
     return instance ({
@@ -9,6 +10,7 @@ export const getUserInfor = id => {
         }
     })
 }
+
 //绑定图片地址跟账号
 export const bindAccount = (account,onlyId,url) => {
     return instance ({
@@ -22,7 +24,6 @@ export const bindAccount = (account,onlyId,url) => {
     })
 }
 
-
 //修改密码
 export const changePassword = (id,oldPassword,newPassword) => {
     return instance ({
@@ -35,6 +36,7 @@ export const changePassword = (id,oldPassword,newPassword) => {
         }
     })
 }
+
 //修改姓名
 export const changeName = (name,id) => {
     return instance ({
@@ -46,6 +48,7 @@ export const changeName = (name,id) => {
         }
     })
 }
+
 //修改性别
 export const changeSex = (sex,id) => {
     return instance ({
@@ -57,6 +60,7 @@ export const changeSex = (sex,id) => {
         }
     })
 }
+
 //修改邮箱
 export const changeEmail = (email,id) => {
     return instance ({
@@ -65,6 +69,125 @@ export const changeEmail = (email,id) => {
         data:{
             email,
             id
+        }
+    })
+}
+//-----------------------用户管理
+// 添加管理员
+export const createAdmin = data => {
+    const {
+        account,
+        ...identity
+    } = data
+    return instance ({
+        url:'/user/createAdmin',
+        method:'POST',
+        data:{
+            account,
+            ...identity
+        }
+    })
+}
+
+// 获取管理员列表
+export const getAdminList = identity => {
+    return instance ({
+        url:'/user/getAdminList',
+        method:'POST',
+        data:{
+            identity
+        }
+    })
+}
+
+// 编辑管理员信息
+export const editAdmin = data => {
+    const {
+        id,
+        ...department
+    } = data
+    return instance ({
+        url:'/user/editAdmin',
+        method:'POST',
+        data:{
+            id,
+            ...department
+        }
+    })
+}
+
+// 对管理员取消赋权
+export const changeIdentityToUser = id => {
+    return instance ({
+        url:'/user/changeIdentityToUser',
+        method:'POST',
+        data:{
+            id
+        }
+    })
+}
+
+// 对用户赋权
+export const changeIdentityAdmin = (id,identity) => {
+    return instance ({
+        url:'/user/changeIdentityToAdmin',
+        method:'POST',
+        data:{
+            id,
+            identity
+        }
+    })
+}
+
+// 通过账号对用户搜索
+export const searchUser = account => {
+    return instance ({
+        url:'/user/searchUser',
+        method:'POST',
+        data:{
+            account
+        }
+    })
+}
+
+// 冻结用户
+export const banUser = id => {
+    return instance ({
+        url:'/user/banUser',
+        method:'POST',
+        data:{
+            id
+        }
+    })
+}
+
+// 解冻用户
+export const hotUser = id => {
+    return instance ({
+        url:'/user/hotUser',
+        method:'POST',
+        data:{
+            id
+        }
+    })
+}
+
+// 获取冻结用户列表
+export const getBanList = () => {
+    return instance ({
+        url:'/user/getBanList',
+        method:'POST',
+    })
+}
+
+// 删除用户
+export const deleteUser = (id, account) => {
+    return instance ({
+        url:'/user/deleteUser',
+        method:'POST',
+        data:{
+            id,
+            account
         }
     })
 }

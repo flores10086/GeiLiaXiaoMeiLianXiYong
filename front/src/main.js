@@ -10,6 +10,8 @@ import 'virtual:svg-icons-register'
 import SvgIcon from '@/components/SvgIcon.vue'
 // ✅ 必须在 createPinia 之后、app.use(pinia) 之前注册
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+// 引入全局样式
+import '@/assets/css/common.scss'
 
 const pinia = createPinia()
 // ✅ 注册插件顺序绝对不能错！
